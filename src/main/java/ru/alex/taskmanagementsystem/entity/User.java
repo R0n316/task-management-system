@@ -21,6 +21,9 @@ public class User {
     private String password;
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @OneToMany(mappedBy = "author")
     private List<Task> createdTasks;
 
