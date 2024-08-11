@@ -5,7 +5,6 @@ public record TaskCreateEditDto(
         String description,
         Integer status,
         Integer priority,
-        Integer authorId,
         Integer executorId
 ) {
 }

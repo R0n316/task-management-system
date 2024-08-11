@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-public record UserDto (
+public record UserDto(
         Integer id,
         String email,
         String password,

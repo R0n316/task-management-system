@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }
 
-    public void register(UserRegisterDto user){
+    public void register(UserRegisterDto user) {
         userRepository.save(userRegisterMapper.toEntity(user));
     }
 }

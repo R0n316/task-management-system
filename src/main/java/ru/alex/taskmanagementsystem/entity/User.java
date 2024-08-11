@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "email")
-@ToString(exclude = {"createdTasks","assignedTasks"})
+@ToString(exclude = {"createdTasks", "assignedTasks"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

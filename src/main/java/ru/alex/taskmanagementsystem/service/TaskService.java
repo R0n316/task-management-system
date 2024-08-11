@@ -24,7 +24,7 @@ public class TaskService {
         this.taskCreateEditMapper = taskCreateEditMapper;
     }
 
-    public TaskReadDto create(TaskCreateEditDto taskDto){
+    public TaskReadDto create(TaskCreateEditDto taskDto) {
         Task task = taskCreateEditMapper.toEntity(taskDto);
         return taskReadMapper.toDto(taskRepository.save(task));
     }

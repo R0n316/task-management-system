@@ -16,6 +16,7 @@ public class Task {
 
     private String title;
     private String description;
+
     @Enumerated
     private Status status;
 

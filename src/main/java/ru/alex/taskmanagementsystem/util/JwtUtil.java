@@ -16,11 +16,11 @@ public class JwtUtil {
     @Value("${app.jwt_secret}")
     private String secret;
 
-    public String generateToken(String email){
+    public String generateToken(String email) {
         Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(60).toInstant());
         return JWT.create()
                 .withSubject("User details")
-                .withClaim("email",email)
+                .withClaim("email", email)
                 .withIssuedAt(new Date())
                 .withIssuer("task management system")
                 .withExpiresAt(expirationDate)

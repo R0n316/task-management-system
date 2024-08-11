@@ -6,7 +6,7 @@ import ru.alex.taskmanagementsystem.dto.TaskReadDto;
 import ru.alex.taskmanagementsystem.entity.Task;
 
 @Component
-public class TaskReadMapper implements Mapper<Task, TaskReadDto>{
+public class TaskReadMapper implements Mapper<Task, TaskReadDto> {
     private final UserReadMapper userReadMapper;
 
     @Autowired
@@ -20,7 +20,7 @@ public class TaskReadMapper implements Mapper<Task, TaskReadDto>{
                 entity.getId(),
                 entity.getTitle(),
                 entity.getDescription(),
-                entity.getStatus().name().toLowerCase().replace("_"," "),
+                entity.getStatus().name().toLowerCase().replace("_", " "),
                 entity.getPriority().name().toLowerCase(),
                 userReadMapper.toDto(entity.getAuthor()),
                 userReadMapper.toDto(entity.getExecutor())

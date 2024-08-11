@@ -35,8 +35,8 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
 
-        if(authHeader == null || authHeader.isBlank() || !authHeader.startsWith("Bearer ")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid JWT token");
+        if (authHeader == null || authHeader.isBlank() || !authHeader.startsWith("Bearer ")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT token");
         } else {
             String jwt = authHeader.substring(7);
             if (jwt.isBlank()) {
@@ -52,14 +52,14 @@ public class JwtFilter extends OncePerRequestFilter {
                             userDetails.getAuthorities()
                     );
 
-                    if(SecurityContextHolder.getContext().getAuthentication() == null){
+                    if (SecurityContextHolder.getContext().getAuthentication() == null) {
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 } catch (JWTVerificationException e) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid JWT token");
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT token");
                 }
             }
-            filterChain.doFilter(request,response);
+            filterChain.doFilter(request, response);
         }
     }
 

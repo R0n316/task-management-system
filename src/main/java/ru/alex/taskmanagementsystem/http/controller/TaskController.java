@@ -23,7 +23,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskReadDto> create(@RequestBody TaskCreateEditDto task){
-        return new ResponseEntity<>(taskService.create(task),CREATED);
+    public ResponseEntity<TaskReadDto> create(@RequestBody TaskCreateEditDto task) {
+        return new ResponseEntity<>(taskService.create(task), CREATED);
     }
 }
