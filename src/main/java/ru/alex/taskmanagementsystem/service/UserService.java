@@ -5,9 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.alex.taskmanagementsystem.dto.AuthDto;
 import ru.alex.taskmanagementsystem.dto.UserDto;
-import ru.alex.taskmanagementsystem.mapper.AuthMapper;
+import ru.alex.taskmanagementsystem.dto.UserRegisterDto;
+import ru.alex.taskmanagementsystem.http.controller.UserRegisterMapper;
 import ru.alex.taskmanagementsystem.repository.UserRepository;
 
 import java.util.Collections;
@@ -15,13 +15,13 @@ import java.util.Collections;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final AuthMapper authMapper;
+    private final UserRegisterMapper userRegisterMapper;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       AuthMapper authMapper) {
+                       UserRegisterMapper userRegisterMapper) {
         this.userRepository = userRepository;
-        this.authMapper = authMapper;
+        this.userRegisterMapper = userRegisterMapper;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }
 
-    public void register(AuthDto user){
-        userRepository.save(authMapper.toEntity(user));
+    public void register(UserRegisterDto user){
+        userRepository.save(userRegisterMapper.toEntity(user));
     }
 }

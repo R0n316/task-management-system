@@ -5,7 +5,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import ru.alex.taskmanagementsystem.dto.AuthDto;
+import ru.alex.taskmanagementsystem.dto.UserLoginDto;
+import ru.alex.taskmanagementsystem.dto.UserRegisterDto;
 import ru.alex.taskmanagementsystem.service.UserService;
 import ru.alex.taskmanagementsystem.util.JwtUtil;
 
@@ -27,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Map<String, String> performRegistration(@RequestBody AuthDto user) {
+    public Map<String, String> performRegistration(@RequestBody UserRegisterDto user) {
 //        TODO заменить Map<> на сущность для ответа
         userService.register(user);
         String token = jwtUtil.generateToken(user.email());
@@ -36,7 +37,7 @@ public class AuthController {
 
 //    TODO заменить везде Map<> на нормальный ответ
     @PostMapping("/login")
-    public Map<String, String> performLogin(@RequestBody AuthDto user) {
+    public Map<String, String> performLogin(@RequestBody UserLoginDto user) {
         var authToken = new UsernamePasswordAuthenticationToken(user.email(), user.password());
         try {
             authenticationManager.authenticate(authToken);

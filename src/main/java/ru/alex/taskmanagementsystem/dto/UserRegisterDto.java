@@ -1,6 +1,6 @@
 package ru.alex.taskmanagementsystem.dto;
 
-public record AuthDto(
+public record UserRegisterDto(
         String email,
         String password,
         String name

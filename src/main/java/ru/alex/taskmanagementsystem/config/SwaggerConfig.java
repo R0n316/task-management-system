@@ -28,8 +28,7 @@ public class SwaggerConfig {
                         )
                 )
                 .info(new Info()
-                        .title("Case Management Service")
-                        .description("Claim Event Information")
+                        .title("Task management system")
                         .version("1.0")
                 );
     }
