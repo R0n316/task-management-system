@@ -1,9 +1,7 @@
 package ru.alex.taskmanagementsystem.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +9,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "comments")
+@EqualsAndHashCode(exclude = "comments")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

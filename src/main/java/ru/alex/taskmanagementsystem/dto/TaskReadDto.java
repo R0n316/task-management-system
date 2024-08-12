@@ -1,5 +1,7 @@
 package ru.alex.taskmanagementsystem.dto;
 
+import java.util.List;
+
 public record TaskReadDto(
         Integer id,
         String title,
@@ -7,6 +9,7 @@ public record TaskReadDto(
         String status,
         String priority,
         UserReadDto author,
-        UserReadDto executor
+        UserReadDto executor,
+        List<CommentReadDto> comments
 ) {
 }
