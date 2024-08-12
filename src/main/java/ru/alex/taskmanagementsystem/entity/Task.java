@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -30,4 +32,7 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "executor", referencedColumnName = "id")
     private User executor;
+
+    @OneToMany(mappedBy = "task")
+    private List<Comment> comments;
 }
