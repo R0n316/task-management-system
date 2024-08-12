@@ -10,6 +10,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 import ru.alex.taskmanagementsystem.dto.TaskCreateEditDto;
 import ru.alex.taskmanagementsystem.dto.TaskReadDto;
+import ru.alex.taskmanagementsystem.entity.Status;
 import ru.alex.taskmanagementsystem.entity.Task;
 import ru.alex.taskmanagementsystem.mapper.TaskCreateEditMapper;
 import ru.alex.taskmanagementsystem.mapper.TaskReadMapper;
@@ -56,21 +57,28 @@ public class TaskService {
                 .map(taskReadMapper::toDto);
     }
 
-    public TaskReadDto update(Integer taskId, TaskCreateEditDto taskDto){
-        Optional<Task> foundTask = taskRepository.findById(taskId);
-        userRepository.findByEmail(JwtUtil.getEmailByJwtToken()).ifPresent(user -> {
-            if(foundTask.isEmpty()) {
-                throw new ResponseStatusException(NOT_FOUND);
-            } else {
-                if(!foundTask.get().getAuthor().getId().equals(user.getId())) {
-                    throw new ResponseStatusException(FORBIDDEN);
-                }
-            }
-        });
+    public TaskReadDto update(Integer id, TaskCreateEditDto taskDto){
+        Optional<Task> foundTask = taskRepository.findById(id);
+        checkTaskAuthorAndAuthorizedUser(foundTask);
         Task updatedTask = foundTask
                 .map(task -> patchUpdate(task, taskCreateEditMapper.toEntity(taskDto)))
                 .orElseThrow(EntityNotFoundException::new);
         return taskReadMapper.toDto(taskRepository.save(updatedTask));
+    }
+
+    public void delete(Integer id) {
+        Optional<Task> foundTask = taskRepository.findById(id);
+        checkTaskAuthorAndAuthorizedUser(foundTask);
+        taskRepository.deleteById(id);
+    }
+
+    public void editStatus(Integer id, Status status) {
+        Optional<Task> foundTask = taskRepository.findById(id);
+        checkTaskAuthorAndExecutorAndAuthorizedUser(foundTask);
+        foundTask.ifPresent(task -> {
+            task.setStatus(status);
+            taskRepository.save(task);
+        });
     }
 
     private Task patchUpdate(Task task, Task updatedTask) {
@@ -82,5 +90,30 @@ public class TaskService {
             }
         });
         return task;
+    }
+
+    private void checkTaskAuthorAndAuthorizedUser(Optional<Task> foundTask) {
+        userRepository.findByEmail(JwtUtil.getEmailByJwtToken()).ifPresent(user -> {
+            if(foundTask.isEmpty()) {
+                throw new ResponseStatusException(NOT_FOUND);
+            } else {
+                if(!foundTask.get().getAuthor().getId().equals(user.getId())) {
+                    throw new ResponseStatusException(FORBIDDEN);
+                }
+            }
+        });
+    }
+
+    private void checkTaskAuthorAndExecutorAndAuthorizedUser(Optional<Task> foundTask) {
+        userRepository.findByEmail(JwtUtil.getEmailByJwtToken()).ifPresent(user -> {
+            if(foundTask.isEmpty()) {
+                throw new ResponseStatusException(NOT_FOUND);
+            } else {
+                Task task = foundTask.get();
+                if(!task.getAuthor().getId().equals(user.getId()) && !task.getExecutor().getId().equals(user.getId())) {
+                    throw new ResponseStatusException(FORBIDDEN);
+                }
+            }
+        });
     }
 }
