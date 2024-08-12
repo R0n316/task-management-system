@@ -1,17 +1,13 @@
 package ru.alex.taskmanagementsystem.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.server.ResponseStatusException;
 import ru.alex.taskmanagementsystem.dto.TaskCreateEditDto;
 import ru.alex.taskmanagementsystem.dto.TaskReadDto;
 import ru.alex.taskmanagementsystem.entity.Task;
@@ -19,6 +15,12 @@ import ru.alex.taskmanagementsystem.mapper.TaskCreateEditMapper;
 import ru.alex.taskmanagementsystem.mapper.TaskReadMapper;
 import ru.alex.taskmanagementsystem.repository.TaskRepository;
 import ru.alex.taskmanagementsystem.repository.UserRepository;
+import ru.alex.taskmanagementsystem.util.JwtUtil;
+
+import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @Slf4j
@@ -42,12 +44,7 @@ public class TaskService {
     public TaskReadDto create(TaskCreateEditDto taskDto) {
         Task task = taskCreateEditMapper.toEntity(taskDto);
 
-        HttpServletRequest request = ((ServletRequestAttributes)
-                RequestContextHolder.currentRequestAttributes()).getRequest();
-        String jwtToken = request.getHeader("Authorization").substring(7);
-        DecodedJWT decodedJWT = JWT.decode(jwtToken);
-        String email = decodedJWT.getClaim("email").asString();
-
+        String email = JwtUtil.getEmailByJwtToken();
         task.setAuthor(userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("author not found")));
 
@@ -60,12 +57,21 @@ public class TaskService {
     }
 
     public TaskReadDto update(Integer taskId, TaskCreateEditDto taskDto){
-        Task updatedTask = taskRepository.findById(taskId)
+        Optional<Task> foundTask = taskRepository.findById(taskId);
+        userRepository.findByEmail(JwtUtil.getEmailByJwtToken()).ifPresent(user -> {
+            if(foundTask.isEmpty()) {
+                throw new ResponseStatusException(NOT_FOUND);
+            } else {
+                if(!foundTask.get().getAuthor().getId().equals(user.getId())) {
+                    throw new ResponseStatusException(FORBIDDEN);
+                }
+            }
+        });
+        Task updatedTask = foundTask
                 .map(task -> patchUpdate(task, taskCreateEditMapper.toEntity(taskDto)))
                 .orElseThrow(EntityNotFoundException::new);
         return taskReadMapper.toDto(taskRepository.save(updatedTask));
     }
-
 
     private Task patchUpdate(Task task, Task updatedTask) {
         ReflectionUtils.doWithFields(Task.class, field -> {
@@ -77,5 +83,4 @@ public class TaskService {
         });
         return task;
     }
-
 }

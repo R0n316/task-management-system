@@ -11,7 +11,7 @@ import ru.alex.taskmanagementsystem.dto.ErrorResponse;
 import ru.alex.taskmanagementsystem.dto.UserLoginDto;
 import ru.alex.taskmanagementsystem.dto.UserRegisterDto;
 import ru.alex.taskmanagementsystem.service.UserService;
-import ru.alex.taskmanagementsystem.util.JwtUtil;
+import ru.alex.taskmanagementsystem.service.JwtService;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -19,21 +19,21 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthController(UserService userService, JwtUtil jwtUtil,
+    public AuthController(UserService userService, JwtService jwtService,
                           AuthenticationManager authenticationManager) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
+        this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> performRegistration(@RequestBody UserRegisterDto user) {
         userService.register(user);
-        String token = jwtUtil.generateToken(user.email());
+        String token = jwtService.generateToken(user.email());
         return new ResponseEntity<>(new AuthResponse(token), CREATED);
     }
 
@@ -45,7 +45,7 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             return new ResponseEntity<>(new ErrorResponse("Incorrect credentials"), BAD_REQUEST);
         }
-        String token = jwtUtil.generateToken(user.email());
+        String token = jwtService.generateToken(user.email());
         return new ResponseEntity<>(new AuthResponse(token), OK);
     }
 }

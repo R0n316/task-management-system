@@ -13,18 +13,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.alex.taskmanagementsystem.service.UserService;
-import ru.alex.taskmanagementsystem.util.JwtUtil;
+import ru.alex.taskmanagementsystem.service.JwtService;
 
 import java.io.IOException;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final UserService userService;
 
     @Autowired
-    public JwtFilter(JwtUtil jwtUtil, UserService userService) {
-        this.jwtUtil = jwtUtil;
+    public JwtFilter(JwtService jwtService, UserService userService) {
+        this.jwtService = jwtService;
         this.userService = userService;
     }
 
@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT token in Bearer Header");
             } else {
                 try {
-                    String email = jwtUtil.validateTokenAndRetrieveClaim(jwt);
+                    String email = jwtService.validateTokenAndRetrieveClaim(jwt);
                     UserDetails userDetails = userService.loadUserByUsername(email);
 
                     var authToken = new UsernamePasswordAuthenticationToken(
