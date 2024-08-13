@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.alex.taskmanagementsystem.entity.Task;
 
 @Repository
-public interface TaskRepository extends JpaRepository<Task,Integer> {
+public interface TaskRepository extends JpaRepository<Task,Integer>, TaskFilterRepository {
+
 }

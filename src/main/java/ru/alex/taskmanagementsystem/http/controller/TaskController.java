@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.alex.taskmanagementsystem.dto.PageResponse;
 import ru.alex.taskmanagementsystem.dto.TaskCreateEditDto;
+import ru.alex.taskmanagementsystem.dto.TaskFilter;
 import ru.alex.taskmanagementsystem.dto.TaskReadDto;
 import ru.alex.taskmanagementsystem.entity.Status;
 import ru.alex.taskmanagementsystem.service.TaskService;
@@ -28,8 +29,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public PageResponse<TaskReadDto> findAll(Pageable pageable) {
-        Page<TaskReadDto> tasks = taskService.findAll(pageable);
+    public PageResponse<TaskReadDto> findAll(@ModelAttribute TaskFilter filter, Pageable pageable) {
+        Page<TaskReadDto> tasks = taskService.findByFilter(filter,pageable);
         return PageResponse.of(tasks);
     }
 
@@ -40,8 +41,8 @@ public class TaskController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<TaskReadDto> update(@PathVariable("id") Integer id,
-                                              @RequestBody TaskCreateEditDto task){
-        return new ResponseEntity<>(taskService.update(id,task),OK);
+                                              @RequestBody TaskCreateEditDto task) {
+        return new ResponseEntity<>(taskService.update(id, task), OK);
     }
 
     @DeleteMapping("/{id}")
@@ -52,11 +53,11 @@ public class TaskController {
 
     @PatchMapping("/{id}/edit-status")
     public ResponseEntity<HttpStatus> changeStatus(@PathVariable("id") Integer id,
-                                                   @RequestBody Map<String, Status> status){
-        if(status.isEmpty() || !status.containsKey("status")) {
+                                                   @RequestBody Map<String, Status> status) {
+        if (status.isEmpty() || !status.containsKey("status")) {
             throw new ResponseStatusException(BAD_REQUEST);
         }
-        taskService.editStatus(id,status.get("status"));
+        taskService.editStatus(id, status.get("status"));
         return new ResponseEntity<>(OK);
     }
 }

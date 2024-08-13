@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'ru.alex'
@@ -19,6 +20,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    querydsl.extendsFrom annotationProcessor, implementation, compilyOnly, runtimeOnly
 }
 
 repositories {
@@ -38,6 +40,20 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation "com.auth0:java-jwt:${versions.jwt}"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${versions.openapi}"
+
+    implementation "com.querydsl:querydsl-jpa:${versions.querydsl}:jakarta"
+    implementation "com.querydsl:querydsl-core:${versions.querydsl}"
+}
+
+querydsl {
+    jpa = true
+    library = "com.querydsl:querydsl-apt:${versions.querydsl}:jakarta"
+    querydslSourcesDir = layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main").get().asFile
+}
+initQuerydslSourcesDir.dependsOn clean
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
 
 tasks.named('test') {

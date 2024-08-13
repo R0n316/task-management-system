@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 import ru.alex.taskmanagementsystem.dto.TaskCreateEditDto;
+import ru.alex.taskmanagementsystem.dto.TaskFilter;
 import ru.alex.taskmanagementsystem.dto.TaskReadDto;
 import ru.alex.taskmanagementsystem.entity.Status;
 import ru.alex.taskmanagementsystem.entity.Task;
@@ -52,12 +53,12 @@ public class TaskService {
         return taskReadMapper.toDto(taskRepository.save(task));
     }
 
-    public Page<TaskReadDto> findAll(Pageable pageable) {
-        return taskRepository.findAll(pageable)
+    public Page<TaskReadDto> findByFilter(TaskFilter filter, Pageable pageable) {
+        return taskRepository.findAllByFilter(filter,pageable)
                 .map(taskReadMapper::toDto);
     }
 
-    public TaskReadDto update(Integer id, TaskCreateEditDto taskDto){
+    public TaskReadDto update(Integer id, TaskCreateEditDto taskDto) {
         Optional<Task> foundTask = taskRepository.findById(id);
         checkTaskAuthorAndAuthorizedUser(foundTask);
         Task updatedTask = foundTask
@@ -94,10 +95,10 @@ public class TaskService {
 
     private void checkTaskAuthorAndAuthorizedUser(Optional<Task> foundTask) {
         userRepository.findByEmail(JwtUtil.getEmailByJwtToken()).ifPresent(user -> {
-            if(foundTask.isEmpty()) {
+            if (foundTask.isEmpty()) {
                 throw new ResponseStatusException(NOT_FOUND);
             } else {
-                if(!foundTask.get().getAuthor().getId().equals(user.getId())) {
+                if (!foundTask.get().getAuthor().getId().equals(user.getId())) {
                     throw new ResponseStatusException(FORBIDDEN);
                 }
             }
@@ -106,11 +107,11 @@ public class TaskService {
 
     private void checkTaskAuthorAndExecutorAndAuthorizedUser(Optional<Task> foundTask) {
         userRepository.findByEmail(JwtUtil.getEmailByJwtToken()).ifPresent(user -> {
-            if(foundTask.isEmpty()) {
+            if (foundTask.isEmpty()) {
                 throw new ResponseStatusException(NOT_FOUND);
             } else {
                 Task task = foundTask.get();
-                if(!task.getAuthor().getId().equals(user.getId()) && !task.getExecutor().getId().equals(user.getId())) {
+                if (!task.getAuthor().getId().equals(user.getId()) && !task.getExecutor().getId().equals(user.getId())) {
                     throw new ResponseStatusException(FORBIDDEN);
                 }
             }

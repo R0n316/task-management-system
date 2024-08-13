@@ -6,7 +6,9 @@ import ru.alex.taskmanagementsystem.dto.CommentReadDto;
 import ru.alex.taskmanagementsystem.dto.TaskReadDto;
 import ru.alex.taskmanagementsystem.entity.Task;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class TaskReadMapper implements Mapper<Task, TaskReadDto> {
@@ -22,7 +24,8 @@ public class TaskReadMapper implements Mapper<Task, TaskReadDto> {
     @Override
     public TaskReadDto toDto(Task entity) {
 
-        List<CommentReadDto> comments = entity.getComments()
+        List<CommentReadDto> comments = Optional.ofNullable(entity.getComments())
+                .orElse(Collections.emptyList())
                 .stream()
                 .map(commentReadMapper::toDto)
                 .toList();
