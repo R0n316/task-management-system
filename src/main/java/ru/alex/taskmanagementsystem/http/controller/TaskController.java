@@ -6,15 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ru.alex.taskmanagementsystem.dto.PageResponse;
 import ru.alex.taskmanagementsystem.dto.TaskCreateEditDto;
 import ru.alex.taskmanagementsystem.dto.TaskFilter;
 import ru.alex.taskmanagementsystem.dto.TaskReadDto;
 import ru.alex.taskmanagementsystem.entity.Status;
 import ru.alex.taskmanagementsystem.service.TaskService;
-
-import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -53,11 +50,8 @@ public class TaskController {
 
     @PatchMapping("/{id}/edit-status")
     public ResponseEntity<HttpStatus> changeStatus(@PathVariable("id") Integer id,
-                                                   @RequestBody Map<String, Status> status) {
-        if (status.isEmpty() || !status.containsKey("status")) {
-            throw new ResponseStatusException(BAD_REQUEST);
-        }
-        taskService.editStatus(id, status.get("status"));
+                                                   @RequestBody Status status) {
+        taskService.editStatus(id, status);
         return new ResponseEntity<>(OK);
     }
 }
