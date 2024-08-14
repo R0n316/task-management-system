@@ -1,15 +1,17 @@
 package ru.alex.taskmanagementsystem.http.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.alex.taskmanagementsystem.dto.PageResponse;
-import ru.alex.taskmanagementsystem.dto.TaskCreateEditDto;
-import ru.alex.taskmanagementsystem.dto.TaskFilter;
-import ru.alex.taskmanagementsystem.dto.TaskReadDto;
+import ru.alex.taskmanagementsystem.dto.PaginationRequest;
+import ru.alex.taskmanagementsystem.dto.task.TaskCreateEditDto;
+import ru.alex.taskmanagementsystem.dto.task.TaskFilter;
+import ru.alex.taskmanagementsystem.dto.task.TaskReadDto;
 import ru.alex.taskmanagementsystem.entity.Status;
 import ru.alex.taskmanagementsystem.service.TaskService;
 
@@ -26,19 +28,23 @@ public class TaskController {
     }
 
     @GetMapping
-    public PageResponse<TaskReadDto> findAll(@ModelAttribute TaskFilter filter, Pageable pageable) {
-        Page<TaskReadDto> tasks = taskService.findByFilter(filter,pageable);
+    public PageResponse<TaskReadDto> findAll(@ModelAttribute TaskFilter filter,
+                                             @Valid PaginationRequest request) {
+        Page<TaskReadDto> tasks = taskService.findByFilter(
+                filter,
+                PageRequest.of(request.pageNumber(),request.pageSize())
+        );
         return PageResponse.of(tasks);
     }
 
     @PostMapping
-    public ResponseEntity<TaskReadDto> create(@RequestBody TaskCreateEditDto task) {
+    public ResponseEntity<TaskReadDto> create(@RequestBody @Valid TaskCreateEditDto task) {
         return new ResponseEntity<>(taskService.create(task), CREATED);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<TaskReadDto> update(@PathVariable("id") Integer id,
-                                              @RequestBody TaskCreateEditDto task) {
+                                              @RequestBody @Valid TaskCreateEditDto task) {
         return new ResponseEntity<>(taskService.update(id, task), OK);
     }
 

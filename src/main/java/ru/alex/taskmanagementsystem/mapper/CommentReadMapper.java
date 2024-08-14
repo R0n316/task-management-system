@@ -2,8 +2,8 @@ package ru.alex.taskmanagementsystem.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.alex.taskmanagementsystem.dto.CommentReadDto;
-import ru.alex.taskmanagementsystem.dto.UserReadDto;
+import ru.alex.taskmanagementsystem.dto.comment.CommentReadDto;
+import ru.alex.taskmanagementsystem.dto.user.UserReadDto;
 import ru.alex.taskmanagementsystem.entity.Comment;
 
 import java.util.Optional;

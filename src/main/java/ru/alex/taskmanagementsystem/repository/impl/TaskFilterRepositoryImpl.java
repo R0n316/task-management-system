@@ -6,9 +6,9 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import ru.alex.taskmanagementsystem.dto.TaskFilter;
+import ru.alex.taskmanagementsystem.dto.task.TaskFilter;
 import ru.alex.taskmanagementsystem.entity.Task;
 import ru.alex.taskmanagementsystem.querydsl.QPredicates;
 import ru.alex.taskmanagementsystem.repository.TaskFilterRepository;
@@ -27,7 +27,7 @@ public class TaskFilterRepositoryImpl implements TaskFilterRepository {
     }
 
     @Override
-    public Page<Task> findAllByFilter(TaskFilter filter, Pageable pageable) {
+    public Page<Task> findAllByFilter(TaskFilter filter, PageRequest pageRequest) {
         Predicate predicate = QPredicates.builder()
                 .add(filter.authorId(), task.author.id::eq)
                 .add(filter.executorId(), task.executor.id::eq)
@@ -37,8 +37,8 @@ public class TaskFilterRepositoryImpl implements TaskFilterRepository {
                 .select(task)
                 .from(task)
                 .where(predicate)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
                 .fetch();
 
         Long total = new JPAQuery<>(entityManager)
@@ -47,6 +47,7 @@ public class TaskFilterRepositoryImpl implements TaskFilterRepository {
                 .where(predicate)
                 .fetchOne();
 
-        return new PageImpl<>(result, pageable, total != null ? total : 0L);
+        return new PageImpl<>(result, pageRequest, total != null ? total : 0L);
     }
+
 }

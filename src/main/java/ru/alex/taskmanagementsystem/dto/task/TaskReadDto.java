@@ -1,4 +1,7 @@
-package ru.alex.taskmanagementsystem.dto;
+package ru.alex.taskmanagementsystem.dto.task;
+
+import ru.alex.taskmanagementsystem.dto.comment.CommentReadDto;
+import ru.alex.taskmanagementsystem.dto.user.UserReadDto;
 
 import java.util.List;
 

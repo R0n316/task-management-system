@@ -1,4 +1,4 @@
-package ru.alex.taskmanagementsystem.dto;
+package ru.alex.taskmanagementsystem.dto.task;
 
 public record TaskFilter(
         Integer authorId,

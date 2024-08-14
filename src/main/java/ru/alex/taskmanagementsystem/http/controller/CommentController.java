@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.alex.taskmanagementsystem.dto.CommentCreateEditDto;
-import ru.alex.taskmanagementsystem.dto.CommentReadDto;
+import ru.alex.taskmanagementsystem.dto.comment.CommentCreateEditDto;
+import ru.alex.taskmanagementsystem.dto.comment.CommentReadDto;
 import ru.alex.taskmanagementsystem.service.CommentService;
 
 import static org.springframework.http.HttpStatus.*;

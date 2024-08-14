@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import ru.alex.taskmanagementsystem.dto.UserRegisterDto;
+import ru.alex.taskmanagementsystem.dto.user.UserRegisterDto;
 import ru.alex.taskmanagementsystem.entity.Role;
 import ru.alex.taskmanagementsystem.entity.User;
 import ru.alex.taskmanagementsystem.mapper.Mapper;

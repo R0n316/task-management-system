@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.alex.taskmanagementsystem.dto.UserDto;
-import ru.alex.taskmanagementsystem.dto.UserRegisterDto;
+import ru.alex.taskmanagementsystem.dto.user.UserDto;
+import ru.alex.taskmanagementsystem.dto.user.UserRegisterDto;
 import ru.alex.taskmanagementsystem.http.controller.UserRegisterMapper;
 import ru.alex.taskmanagementsystem.repository.UserRepository;
 

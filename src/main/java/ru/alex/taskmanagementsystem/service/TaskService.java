@@ -4,13 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.server.ResponseStatusException;
-import ru.alex.taskmanagementsystem.dto.TaskCreateEditDto;
-import ru.alex.taskmanagementsystem.dto.TaskFilter;
-import ru.alex.taskmanagementsystem.dto.TaskReadDto;
+import ru.alex.taskmanagementsystem.dto.task.TaskCreateEditDto;
+import ru.alex.taskmanagementsystem.dto.task.TaskFilter;
+import ru.alex.taskmanagementsystem.dto.task.TaskReadDto;
 import ru.alex.taskmanagementsystem.entity.Status;
 import ru.alex.taskmanagementsystem.entity.Task;
 import ru.alex.taskmanagementsystem.mapper.TaskCreateEditMapper;
@@ -53,8 +53,8 @@ public class TaskService {
         return taskReadMapper.toDto(taskRepository.save(task));
     }
 
-    public Page<TaskReadDto> findByFilter(TaskFilter filter, Pageable pageable) {
-        return taskRepository.findAllByFilter(filter,pageable)
+    public Page<TaskReadDto> findByFilter(TaskFilter filter, PageRequest pageRequest) {
+        return taskRepository.findAllByFilter(filter,pageRequest)
                 .map(taskReadMapper::toDto);
     }
 

@@ -1,4 +1,4 @@
-package ru.alex.taskmanagementsystem.dto;
+package ru.alex.taskmanagementsystem.dto.user;
 
 public record UserReadDto(
         Integer id,
