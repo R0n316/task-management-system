@@ -1,4 +1,4 @@
-package ru.alex.taskmanagementsystem.http.controller;
+package ru.alex.taskmanagementsystem.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,7 +7,6 @@ import org.springframework.util.StringUtils;
 import ru.alex.taskmanagementsystem.dto.user.UserRegisterDto;
 import ru.alex.taskmanagementsystem.entity.Role;
 import ru.alex.taskmanagementsystem.entity.User;
-import ru.alex.taskmanagementsystem.mapper.Mapper;
 
 import java.util.Optional;
 
