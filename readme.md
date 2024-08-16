@@ -40,28 +40,28 @@ To get a local copy up and running follow these simple example steps.
 ### _All the data that needs to be sent can be viewed in swagger-ui_
 
 To access the API, you need to register to receive a JWT token
-```http request
+```
 /api/auth/register
 ```
 You can log into an existing account
-```http request
+```
 /api/auth/login
 ```
 To create a new task, you need to send a POST request to the following url:
-```http request
+```
 /api/tasks
 ```
 the same url should be used to get all tasks (you can also pass the page number and page size to get the required data)
 
 to update or change a task you must contact the url
-```http request
+```
 /api/tasks/{id}
 ```
 
 where id is the task id. Only the task author can modify or delete a task.
 
 There is also a separate url for changing the status.
-```http request
+```
 /api/tasks/{id}/edit-status
 ```
 
@@ -70,12 +70,12 @@ Its difference is that the status can be changed by both the author of the task 
 __Any user__ can leave a comment on any task. But only the author of the comment can delete it.
 
 To leave a comment on a task, you need to send a request to the following url:
-```http request
+```
 /api/comments
 ```
 
 to change/delete on url:
-```http request
+```
 /api/comments/{id}
 ```
 
