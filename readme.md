@@ -27,7 +27,7 @@ To get a local copy up and running follow these simple example steps.
 1. Install Docker
 2. Clone the repo
    ```sh
-   git clone https://github.com/R0n316/book-store-v2.git
+   git clone https://github.com/R0n316/task-management-system.git
    ```
 3. execute command
    ```sh
